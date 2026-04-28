@@ -17,10 +17,15 @@ public class Main {
         );
 
         ProcesadorLogServicio servicio = new ProcesadorLogServicio();
-        Respuesta<Map<String, Long>> resultado = servicio.contarTiposDeLog(servicio.transformarLogs(logs));
+        List<String> logsTransformados = servicio.transformarLogs(logs);
+        logsTransformados.forEach(System.out::println);
+
+        System.out.println("\n--- Resumen de Logs ---");
+        Respuesta<Map<String, Long>> resultado = servicio.procesarLogs(logs);
 
         if (resultado.isExito()) {
-            resultado.getData().forEach((tipo, cantidad) -> System.out.println(tipo + ": " + cantidad));
+            resultado.getData().forEach((tipo, cantidad) ->
+                    System.out.println("[" + tipo + "]: " + cantidad));
         } else {
             System.out.println("Error: " + resultado.getMensaje());
         }
