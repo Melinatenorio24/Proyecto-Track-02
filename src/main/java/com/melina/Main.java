@@ -13,11 +13,16 @@ public class Main {
                 "[ERROR] Fallo de conexion",
                 "[INFO] Archivo guardado",
                 "[ERROR] Timeout en base de datos",
-                );
+                "[WARNING] Memoria insuficiente"
+        );
+
         ProcesadorLogServicio servicio = new ProcesadorLogServicio();
-        Respuesta<Map<String, Long>> resultado = servicio.contarTiposDeLog(logs);
+        Respuesta<Map<String, Long>> resultado = servicio.contarTiposDeLog(servicio.transformarLogs(logs));
 
-        System.out.println("Resultado del procesamiento: " + resultado.getData());
-
+        if (resultado.isExito()) {
+            resultado.getData().forEach((tipo, cantidad) -> System.out.println(tipo + ": " + cantidad));
+        } else {
+            System.out.println("Error: " + resultado.getMensaje());
+        }
     }
 }
